@@ -96,6 +96,7 @@ public class BankRecords extends Client {
 			robjs[idx].setCar(rowData.get(7)); // Get 8th column
 			robjs[idx].setSavingsAcct(rowData.get(8)); // Get 9th column
 			robjs[idx].setMortgage(rowData.get(10)); // Get 11th column
+			robjs[idx].setPep(rowData.get(11)); // Get 12th column
 			idx++;
 		}
 		

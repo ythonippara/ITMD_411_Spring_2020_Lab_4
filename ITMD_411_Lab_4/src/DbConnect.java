@@ -1,3 +1,10 @@
+/**
+ * This program performs data analysis 
+ * and stores the result in the database.
+ * 
+ * @author Yulia Thonippara (A20411313)
+ * ITMD 411 Spring 2020 Lab 4
+ */
 
 import java.sql.Connection;
 import java.sql.DriverManager; 

@@ -1,47 +1,54 @@
+/**
+ * This program performs data analysis 
+ * and stores the result in the database.
+ * 
+ * @author Yulia Thonippara (A20411313)
+ * ITMD 411 Spring 2020 Lab 4
+ */
+
+//import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Dao {
 	
-	//Declare DB objects 
+	// Declare DB objects 
 	DbConnect conn = null;
 	Statement stmt = null;
 	
-	// constructor
-	public Dao() { //create db object instance
+	// Constructor
+	public Dao() { 
+		// Create DbConnect object instance
 		conn = new DbConnect();
 	}
 	
-	// CREATE TABLE METHOD
+	// Create table method
 	public void createTable() {
 		try {
 			// Open a connection
-			System.out.println("Connecting to a selected database to create Table...");
+			System.out.println("Connecting to a selected database to create table...");
+			stmt = conn.connect().createStatement();
 			System.out.println("Connected database successfully...");
 
 			// Execute create query
 			System.out.println("Creating table in given database...");
-
-			stmt = conn.connect().createStatement();
-
-			String sql = "CREATE TABLE yourTableName_tab " + 
-			"(pid INTEGER not NULL AUTO_INCREMENT, " +
+			String sql = "CREATE TABLE y_thon_tab_test " + 
+			"(pid INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
 					" id VARCHAR(10), " +
-			" income numeric(8,2), " + 
-					" pep VARCHAR(4), " + 
-			" PRIMARY KEY ( pid ))";
+			" income NUMERIC(8, 2), " + 
+					" pep VARCHAR(3))";
 
 			stmt.executeUpdate(sql);
 			System.out.println("Created table in given database...");
-			conn.connect().close(); //close db connection 
-		} catch (SQLException se) {
+			conn.connect().close(); // Close DB connection 
+		} catch (SQLException e) {
 			// Handle errors for JDBC
-			se.printStackTrace();
+			System.out.println("ERROR: " + e.getMessage());
 		}
 	} // End createTable()
 	
-	// INSERT INTO METHOD
+	// Insert into method
 	public void insertRecords(BankRecords[] robjs) {
 		try {
 			// Execute a query
@@ -51,28 +58,33 @@ public class Dao {
 		
 	        // Include all object data to the database table
 			for (int i = 0; i < robjs.length; ++i) {
-				// finish string assignment to insert all object data 
+				// finish string assignment to insert all object data
 				// (id, income, pep) into your database table
-				
-				//sql = "INSERT INTO yourTableName_tab(field 1,field 2, field n) " +
-				//"VALUES (' "+value 1+" ', ' "+value 2+" ', ' "+value n+" ' )";
-
-				sql = "                  ";
+				sql = "INSERT INTO y_thon_tab_test(id, income, pep) " +
+						"VALUES (' "+robjs[i].getId()+" ', ' "+ robjs[i].getIncome()+" ', ' "+ robjs[i].getPep()+" ' )";
 				stmt.executeUpdate(sql);
 			}
 			conn.connect().close();
-		} catch (SQLException se) { se.printStackTrace(); }
+		} catch (SQLException e) { 
+			System.out.println("ERROR: " + e.getMessage());
+		}
 	} // End insertRecords()
 	
-	public ResultSet retrieveRecords() throws SQLException {
+	// Retrieve record method
+	public ResultSet retrieveRecords() {
 		ResultSet rs = null;
-		
-		stmt = conn.connect().createStatement();
-		String sql = "SELECT * from yourTableName_tab";
-		rs = stmt.executeQuery(sql);
-		conn.connect().close();
+		try {
+			System.out.println("Connecting to a selected database for record retrieval...");
+			stmt = conn.connect().createStatement();
+			System.out.println("Connected database successfully...");
+			String sql = "SELECT id, income, pep from y_thon_tab_test ORDER BY pep DESC"; // Sort pep field in descending order
+			System.out.println("Creating SELECT statement...");
+			rs = stmt.executeQuery(sql);
+			conn.connect().close();
+		} catch (SQLException e){
+			System.out.println("ERROR: " + e.getMessage());
+		}
 		return rs;
-	}
-
+	} // End retrieveRecords()
 
 } // End class Dao
