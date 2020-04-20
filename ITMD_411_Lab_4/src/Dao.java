@@ -7,6 +7,7 @@
  */
 
 //import java.sql.PreparedStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,7 +15,7 @@ import java.sql.Statement;
 public class Dao {
 	
 	// Declare DB objects 
-	DbConnect conn = null;
+	static DbConnect conn = null;
 	Statement stmt = null;
 	
 	// Constructor
@@ -69,6 +70,33 @@ public class Dao {
 			System.out.println("ERROR: " + e.getMessage());
 		}
 	} // End insertRecords()
+	
+	public void updateRecords(String pep, double income) {
+		String sql = "UPDATE y_thon_tab_test SET pep = ? WHERE income < ?";
+		// use prepared statement
+		try (PreparedStatement pstmt = conn.connect().prepareStatement(sql)) {
+			pstmt.setString(1, pep); // # represents order of parameters
+			pstmt.setDouble(2, income); // # represents order of parameters
+			pstmt.executeUpdate();
+			System.out.println("Record/s updated");
+		} catch (SQLException e) {
+			System.out.println("ERROR: " + e.getMessage());
+		}
+	}
+
+	
+	public void deleteRecords(int pid) {
+		
+		String sql = "DELETE FROM y_thon_tab_test WHERE pid = ?";
+		// use prepared statement
+		try (PreparedStatement pstmt = conn.connect().prepareStatement(sql)) {
+			pstmt.setInt(1, pid); // @param columns #, column name
+			pstmt.executeUpdate();
+			System.out.println("Record deleted");
+		} catch (SQLException e) {
+			System.out.println("ERROR: " + e.getMessage());
+		}
+	}
 	
 	// Retrieve record method
 	public ResultSet retrieveRecords() {

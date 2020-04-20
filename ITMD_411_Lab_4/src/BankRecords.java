@@ -1,9 +1,9 @@
 /**
- * This program performs data analysis on bank-Detail.csv
- * and prints the result to bankrecords.txt.
+ * This program performs data analysis 
+ * and stores the result in the database.
  * 
  * @author Yulia Thonippara (A20411313)
- * Created for ITMD 411 Spring 2020
+ * ITMD 411 Spring 2020 Lab 4
  */
 
 import java.io.BufferedReader;
