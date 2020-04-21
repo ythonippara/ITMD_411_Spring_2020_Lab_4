@@ -30,8 +30,8 @@ public class LoanProcessing extends BankRecords {
 		ResultSet rs = dao.retrieveRecords();
 		
 		// Create heading for display
-		System.out.println("Loan Analysis Report");
-		System.out.println("\nID" + "\tINCOME" + "\t\tPEP");
+		System.out.println("\n\tLoan Analysis Report");
+		System.out.println("\n ID" + "\t\tINCOME" + "\t\t PEP");
 		
 		// Extract data from result set
 		try {
@@ -42,7 +42,8 @@ public class LoanProcessing extends BankRecords {
 				String pep = rs.getString("pep");
 				
 				// Display values for id, income, pep
-				System.out.println(id + "\t$" + income + "\t" + pep);
+				String s = String.format("%-2s\t\t$%6.2f\t%-2s", id, income, pep);
+				System.out.println(s);
 			}
 			// Clean up environment
 			rs.close();
@@ -81,10 +82,14 @@ public class LoanProcessing extends BankRecords {
 				dao.insertRecords(robjs); // Perform inserts
 				break;
 			case 3:
+				/**
+				 * updateRecords() sets the values of pep column to "NO"
+				 * if the corresponding values of income column are less than 25000
+				**/
 				dao.updateRecords("NO", 25000);
 				break;
 			case 4:
-				System.out.println("Please enter a record you want to delete: ");
+				System.out.println("Please enter the record you want to delete: ");
 				int rcrd = sc.nextInt();
 				dao.deleteRecords(rcrd); // Pass a value of a pid column
 				break;
@@ -96,10 +101,10 @@ public class LoanProcessing extends BankRecords {
 				break;
 			case 7:
 				System.out.println("Exiting...");
+				sc.close();
 				System.exit(0);
 			}
 		    System.out.println();
-		    //sc.close();
 		} while (true);
 	} // End main()
 
