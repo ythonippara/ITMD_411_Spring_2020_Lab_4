@@ -6,16 +6,26 @@
  * ITMD 411 Spring 2020 Lab 4
  */
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
+@SuppressWarnings("serial")
 public class LoanProcessing extends BankRecords {
 	
 	static Dao dao = new Dao(); // Instantiate a Dao object
 	
 	public static void menu() {
-		String menuItems = "1. Create table"
+		String menuItems = "\n1. Create table"
 				+ "\n2. Insert records"
 				+ "\n3. Update records"
 				+ "\n4. Delete records"
@@ -65,11 +75,77 @@ public class LoanProcessing extends BankRecords {
 		}
 	} // End guiDisplay()
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws SQLException {
 		
 		BankRecords br = new BankRecords();
 		br.readData();
 		
+		/**Extra credit: create and serialize a map to a file **/
+		Map<Long, BankRecords> bankMap = new HashMap<Long, BankRecords>();
+		// set timer variables (start and end)
+		long i =0;
+		for (BankRecords value: robjs) {
+			bankMap.put(++i, value);
+		}
+		
+		// Serialize object
+		 FileOutputStream fos;
+		try {
+			fos = new FileOutputStream("map.ser");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			 
+			 // Start timer variable
+			 oos.writeObject(bankMap);
+			 
+			 oos.flush();
+			 oos.close();
+			 fos.flush();
+			 fos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Sleep for 5 seconds
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Deserialize object
+		FileInputStream fis;
+		ObjectInputStream ois;
+
+		
+		try {
+			fis = new FileInputStream("map.ser");
+			ois = new ObjectInputStream(fis);
+			bankMap = (Map<Long, BankRecords>) ois.readObject();
+		
+			// Print map
+			//int index = 0;
+			for (Entry<Long, BankRecords> mapEntry: bankMap.entrySet()) {
+				Long key = (Long) mapEntry.getKey();
+				String value = (String) mapEntry.getValue().getId();
+				System.out.println("Data => " + "Key value: " + key 
+						+ " ID value: " + value);
+				//index++;
+			} // End for loop
+			ois.close();
+			fis.close();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		// End timer variable
+		// Show time lapse to console
+			
 		Scanner sc = new Scanner(System.in);
 		do {
 			menu();

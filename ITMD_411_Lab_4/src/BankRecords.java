@@ -11,11 +11,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BankRecords extends Client {
+@SuppressWarnings("serial")
+public class BankRecords extends Client implements Serializable {
 	// Set up static objects for IO processing
 
 	// Array of BankRecords objects
